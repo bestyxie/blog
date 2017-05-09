@@ -85,10 +85,10 @@ if(program.resume) console.log('This is my resume!');
 
 program.resume为Boolean类型，也可以为String类型。值为真或者不为空，则执行后面的语句。
 option接受四个参数：
-* 1、关键字，包括简写和全写，简写用 -，全写用--，用‘,’，‘|’分隔
-* 2、描述，会在help信息里展示出来
-* 3、回调函数
-* 4、默认值
+1. 关键字，包括简写和全写，简写用 -，全写用--，用‘,’，‘|’分隔
+2. 描述，会在help信息里展示出来
+3. 回调函数
+4. 默认值
 #### Unknow Option
 如果option收到未知参数时，会抛出错误，可以使用allowUnknowOption()
 ```javascript
