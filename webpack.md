@@ -61,14 +61,15 @@ entry为入口文件的路径，output就是输出
 webpack --config config.js
 ```
 
-##### 2、 **文件管理**
+##### 2、 资源管理(assets management)
 webpack不仅可以打包js文件，还可以打包css，图片、字体、json等文件，为了可以在js文件里面引用这些文件，我们需要安装对应的loader
-（1）Loading css
+**（1）Loading css**
+
   为了打包css文件，我们需要安装style-loader和css-loader
 ```
 npm install --save-dev style-loader css-loader
 ```
-**webpack.config.js**
+webpack.config.js
 ```javascript
 var path = require("path")
 
@@ -90,3 +91,37 @@ module.exports = {
 ```
 loader是从右往左执行的，意思是会先执行css-loader再执行style-loader，现在我们可以通过import './style.css'的方式在需要用到该样式的文件里引入css文件了，该模块在执行的时候，
 会在<head>标签内生成<style>标签，里面包含已经被序列化（stringified）过的样式
+
+**(2)Loading Image、Json...**
+
+webpack打包图片、json、字体等文件，只需要用到file-loader
+```
+npm install --save-dev file-loader
+```
+webpack.config.js
+```javscript
+var path = require("path")
+
+module.exports = {
+    entry: "./src/index.js",
+    output: {
+      filename: "bundle.js",
+      path: path.join(__dirname, "dist")
+    },
+    module: {
+      rules: [
+        {
+          text: /\.(css|sass|less)$/,
+          use: ["style-loader","css-loader"]
+        },
+        {
+          text: /\.(jpeg|png|gif|svg)$/,
+          use: ["file-loader"]
+        }
+      ]
+    }
+}
+```
+其他资源雷同
+
+#### （3）输出管理（output management）
