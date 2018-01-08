@@ -63,6 +63,7 @@ webpack --config config.js
 
 ##### 2、 资源管理(assets management)
 webpack不仅可以打包js文件，还可以打包css，图片、字体、json等文件，为了可以在js文件里面引用这些文件，我们需要安装对应的loader
+
 **（1）Loading css**
 
   为了打包css文件，我们需要安装style-loader和css-loader
@@ -77,7 +78,7 @@ module.exports = {
     entry: "./src/index.js",
     output: {
       filename: "bundle.js",
-      path: path.join(__dirname, "dist")
+      path: path.resolve(__dirname, "dist")
     },
     module: {
       rules: [
@@ -106,7 +107,7 @@ module.exports = {
     entry: "./src/index.js",
     output: {
       filename: "bundle.js",
-      path: path.join(__dirname, "dist")
+      path: path.resolve(__dirname, "dist")
     },
     module: {
       rules: [
@@ -125,3 +126,56 @@ module.exports = {
 其他资源雷同
 
 #### （3）输出管理（output management）
+>在平时的开发中，免不了会在文件名后面再加上hash值作为文件的名称，或者需要增加入口文件，每一次构建资源的名称都会发生改变，
+那么再引用了入口文件的html里，就需要做出相应的改变，这就变得特别的麻烦。这时可以用`html-webpack-plugin`为我们解决
+问题
+```
+npm install --save-dev html-webpack-plugin
+```
+webpack.config.js
+```javascript
+var path = require("path");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: {
+    app: "./src/index.js"
+  },
+  plugins: [
+    new HtmlWebpackPlugin()
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
+该插件会将js资源放到body标签后面，当使用了`extract-text-webpack-plugin`的时候，会将样式通过link
+标签放在head标签里
+
+#### (4)开发模式(development)
+在前面的配置中，webpack会将我们依赖的所有的js资源都打包到一个bundle里面，当需要调试时，浏览器console
+出来的信息指向的也是在bundle里面的位置，很难追踪到代码的原始位置。为了更好的追踪错误和警告，javascript提供了
+source map功能，将编译后的代码映射回原始源代码，它可以明确地告诉我们错误来自源代码的哪个文件哪一行。
+
+在webpack中，我们使用`inline-source-map`选项进行配置
+
+webpack.config.js
+```javascript
+var path = require("path");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: {
+    app: "./src/index.js"
+  },
+  devtool: "inline-source-map",
+  plugins: [
+    new HtmlWebpackPlugin()
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
