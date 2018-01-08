@@ -132,6 +132,7 @@ module.exports = {
 ```
 npm install --save-dev html-webpack-plugin
 ```
+
 webpack.config.js
 ```javascript
 var path = require("path");
@@ -170,6 +171,58 @@ module.exports = {
     app: "./src/index.js"
   },
   devtool: "inline-source-map",
+  plugins: [
+    new HtmlWebpackPlugin()
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist")
+  }
+}
+```
+**选择一个开发工具**
+
+每次编译代码的时候都需要手动执行webpack命令，这就变得非常麻烦，在webpack中有一下三种选项可以帮助你在代码发生变化的
+时候自动编译代码：
+
+1、Webpack's Watch Mode
+
+2、Webpack-dev-server
+
+3、Webpack-dev-middleware
+
+**观察者模式（Webpack's Watch Mode）**
+
+```
+webpack --watch
+```
+现在运行这段脚本，你会看到webpack编译代码，却不会退出命令行，这是因为script脚本还在观察文件
+
+我们再去修改任意一个文件的时候，就能到看到webpack自动重新编译修改后的模块。
+
+这种方式唯一的缺点就是，为了看到修改后的效果，必须手动刷新浏览器。如果能自动刷新浏览器就更好了，
+`webpack-dev-server`恰好能够实现我们想要的效果。
+
+**webpack-dev-server**
+
+`webpack-dev-server`可以为你提供一个简单的web服务器，并且能够实时重新加载（live reloading），
+还是要安装啊，哭唧唧
+```
+npm install --save-dev webpack-dev-server
+```
+webpack.config.js
+```javascript
+var path = require("path");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: {
+    app: "./src/index.js"
+  },
+  devtool: "inline-source-map",
+  devServer: {
+    contentBase: "./dist"
+  },
   plugins: [
     new HtmlWebpackPlugin()
   ],
