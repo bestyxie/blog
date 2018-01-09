@@ -303,3 +303,35 @@ node server.js
 ```
 现在可以在浏览器中打开`http://localhost:3000`，就可以看到你的webpack应用程序已经运行,并且可以在文件修改之后自动刷新浏览器
 #### 热替换
+emmmmmm...感觉这个功能归于单页面的开发比较重要，如果是使用react进行开发，参考[react-hot-loader](https://github.com/gaearon/react-hot-loader),
+vue则参考[vue loader](https://github.com/vuejs/vue-loader)
+#### Tree Shaking
+官方文档说tree shaking是一个术语。。。通常用于描述移除javascript上下文的未引用代码（dead-code）
+
+当我们引入一个模块的时候，有可能只用到了他们其中的一些方法，但是webpack还是会将其他没有用到的方法一块儿打包进bundle中
+
+为了解决这个问题，我们可以添加一个能够删除未引用代码的压缩工具——UglifyjsPlugin
+```
+npm install --save-dev uglifyjs-webpack-plugin
+```
+webpack.config.js
+```javascript
+const path = require("path");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
+module.exports = {
+  entry: {
+      app: "./src/index.js"
+    },
+    devtool: "inline-source-map",
+    plugins: [
+      new HtmlWebpackPlugin(),
+      new UglifyJsPlugin()
+    ],
+    output: {
+      filename: "[name].bundle.js",
+      path: path.resolve(__dirname, "dist"),
+      publicPath: "/"
+    }
+}
+```
