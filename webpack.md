@@ -232,3 +232,74 @@ module.exports = {
   }
 }
 ```
+然后执行命令
+```
+webpack-dev-server --open
+```
+现在再对相关代码进行修改的时候，你可以发现浏览器会自动刷新
+
+**webpack-dev-middleware**
+
+通过名称我们也能发现，这其实是一个中间件，这意味着我们可以在自己搭建的服务器上实现实时刷新，而不是webpack提供的web
+服务器。
+
+通过`webpack-dev-middleware`进行实时刷新，需要通过express搭建web服务器,该中间件将通过webpack处理后的文件发送到该服务器
+```
+npm install --save-dev express webpack-dev-middleware
+```
+webpack.config.js
+```javascript
+var path = require("path");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: {
+    app: "./src/index.js"
+  },
+  devtool: "inline-source-map",
+  plugins: [
+    new HtmlWebpackPlugin()
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    publicPath: "/"
+  }
+}
+```
+
+项目根目录下新建一个`server.js`文件
+```
+|-webpack-demo
+  |-dis
+    |-index.html
+  |-src
+    |-index.js
+  |-server.js
+  |-webpack.config.js
+  |-package.json
+```
+server.js
+```javascript
+var express = require("express");
+var webpack = require("webpack");
+var webpackDevMiddleware = require("webpack-dev-middleware");
+
+var app = express();
+var config = require("./webpack.config.js");
+var compiler = webpack(config);
+
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: config.output.publicPath
+}));
+
+app.listen(3000, function () {
+  console.log("Example app listening on port 3000!\n");
+})
+```
+现在可以在本地执行
+```
+node server.js
+```
+现在可以在浏览器中打开`http://localhost:3000`，就可以看到你的webpack应用程序已经运行,并且可以在文件修改之后自动刷新浏览器
+#### 热替换
