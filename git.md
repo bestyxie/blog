@@ -25,6 +25,11 @@ git stash apply stash@{1}
 
 如果想丢弃某个储藏，则使用`git stash drop`加上储藏的名称进行丢弃
 
+#### 查看远程分支列表
+```javascript
+git branch -r
+```
+
 #### 拉取远程分支并创建本地分支
 （1）本地创建新分支并自动切换到该本地分支
 ```javascript
