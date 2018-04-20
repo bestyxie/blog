@@ -24,3 +24,13 @@ git stash apply stash@{1}
 或者通过`git stash pop`应用储藏，同时立即将其从堆栈中移走。
 
 如果想丢弃某个储藏，则使用`git stash drop`加上储藏的名称进行丢弃
+
+#### 拉取远程分支并创建本地分支
+（1）本地创建新分支并自动切换到该本地分支
+```javascript
+git checkout -b 本地分支名 origin/远程分支名
+```
+（2）本地创建新分支，但不会自动切换到该分支，需要手动checkout
+```javascript
+git fetch origin 远程分知名:本地分支名
+```
