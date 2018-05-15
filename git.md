@@ -35,7 +35,11 @@ git branch -r
 ```javascript
 git checkout -b 本地分支名 origin/远程分支名
 ```
-（2）本地创建新分支，但不会自动切换到该分支，需要手动checkout
+（2）创建本地分支并切换到该分支
+```javascript
+git checkout -b 本地分支名
+```
+（3）本地创建新分支，但不会自动切换到该分支，需要手动checkout
 ```javascript
 git fetch origin 远程分知名:本地分支名
 ```
